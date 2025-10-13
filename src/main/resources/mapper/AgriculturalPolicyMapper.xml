@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.anyanghome.mapper.AgriculturalPolicyMapper">
+
+    <select id="selectAgriculturalPolicyPage" resultType="com.example.anyanghome.pojo.entity.AgriculturalPolicy">
+        SELECT p.*, pc.name as category_name
+        FROM agricultural_policy p
+        LEFT JOIN agricultural_policy_category pc ON p.category_id = pc.id
+        WHERE p.is_enabled = 1
+        <if test="categoryId != null">
+            AND p.category_id = #{categoryId}
+        </if>
+        ORDER BY p.is_top DESC, p.publish_date DESC
+    </select>
+
+</mapper>
