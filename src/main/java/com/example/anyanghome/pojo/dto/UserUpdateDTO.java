@@ -1,8 +1,9 @@
-package com.example.r2mall.pojo.dto;
+package com.example.anyanghome.pojo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 /**
