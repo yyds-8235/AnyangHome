@@ -40,4 +40,13 @@ public class AgriculturalNewsServiceImpl implements AgriculturalNewsService {
             agriculturalNewsMapper.updateById(news);
         }
     }
+
+    @Override
+    public void likeAgriculturalNews(Long id) {
+        AgriculturalNews news = agriculturalNewsMapper.selectById(id);
+        if (news != null) {
+            news.setLikeCount(news.getLikeCount() + 1);
+            agriculturalNewsMapper.updateById(news);
+        }
+    }
 }
