@@ -22,4 +22,9 @@ public interface AgriculturalNewsService {
      * 增加助农资讯阅读量
      */
     void incrementViewCount(Long id);
+
+    /**
+     * 赞助农资讯
+     */
+    void likeAgriculturalNews(Long id);
 }

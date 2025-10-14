@@ -54,4 +54,12 @@ public class AgriculturalNewsController {
         agriculturalNewsService.incrementViewCount(id);
         return Result.success(news);
     }
+
+    @PostMapping("/{id}/like")
+    @Operation(summary = "点赞助农资讯")
+    public Result<Void> likeAgriculturalNews(@Parameter(description = "资讯ID") @PathVariable Long id) {
+        agriculturalNewsService.likeAgriculturalNews(id);
+        return Result.success();
+    }
+
 }
