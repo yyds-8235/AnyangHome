@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public void register(UserRegisterDTO dto) {
+    public User register(UserRegisterDTO dto) {
         // 检查用户名是否已存在
         User existUser = getByUsername(dto.getUsername());
         if (existUser != null) {
@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(PasswordUtil.simpleEncode(dto.getPassword()));
         user.setGender(0); // 默认未知
         userMapper.insert(user);
+        
+        // 返回新创建的用户对象
+        return user;
     }
 
     @Override

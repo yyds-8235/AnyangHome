@@ -49,12 +49,22 @@ public class AuthController {
 
     }
 
-    @PostMapping("/user/register")
+    @PostMapping("/register")
     @Operation(summary = "用户注册")
-    public Result<String> userRegister(@Valid @RequestBody UserRegisterDTO dto) {
+    public Result<LoginSuccessVO> userRegister(@Valid @RequestBody UserRegisterDTO dto) {
         try {
-            userService.register(dto);
-            return Result.success("注册成功");
+            // 注册用户
+            User user = userService.register(dto);
+            
+            // 自动登录
+            StpUtil.login(user.getId());
+            StpUtil.getSession().set("userId", user.getId());
+            
+            // 返回与登录接口相同的响应
+            LoginSuccessVO loginSuccessVO = new LoginSuccessVO();
+            loginSuccessVO.setToken(StpUtil.getTokenInfo().getTokenValue());
+            loginSuccessVO.setUserInfo(user);
+            return Result.success(loginSuccessVO);
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }

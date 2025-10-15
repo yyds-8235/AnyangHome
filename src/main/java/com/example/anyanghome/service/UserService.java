@@ -13,7 +13,7 @@ public interface UserService {
     /**
      * 用户注册
      */
-    void register(UserRegisterDTO dto);
+    User register(UserRegisterDTO dto);
 
     /**
      * 根据用户名查询用户

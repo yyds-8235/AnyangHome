@@ -49,7 +49,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                                 .addPathPatterns("/api/**") // 需要登录认证的路径
                                 .excludePathPatterns(
                                                 "/api/auth/login", // 登录接口
-                                                "/api/auth/user/register", // 用户注册
+                                                "/api/auth/register", // 用户注册
                                                 "/swagger-ui/**", // Swagger UI
                                                 "/v3/api-docs/**", // API文档
                                                 "/swagger-ui.html", // Swagger UI
