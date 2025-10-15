@@ -61,4 +61,5 @@ public class AgriculturalNewsController {
         agriculturalNewsService.likeAgriculturalNews(id);
         return Result.success();
     }
+
 }
