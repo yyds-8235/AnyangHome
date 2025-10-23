@@ -3,7 +3,9 @@ package com.example.anyanghome.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.anyanghome.common.Result;
 import com.example.anyanghome.pojo.dto.ExpressOrderDTO;
+import com.example.anyanghome.pojo.dto.MessageCreateDTO;
 import com.example.anyanghome.pojo.entity.Order;
+import com.example.anyanghome.service.MessageService;
 import com.example.anyanghome.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +27,10 @@ import java.util.Map;
 public class ExpressController {
 
     private final OrderService orderService;
-    
+
     // 快递公司映射
     private static final Map<Integer, String> EXPRESS_COMPANIES = new HashMap<>();
-    
+
     static {
         EXPRESS_COMPANIES.put(1, "顺丰速运");
         EXPRESS_COMPANIES.put(2, "圆通速递");
@@ -36,6 +39,8 @@ public class ExpressController {
         EXPRESS_COMPANIES.put(5, "申通快递");
         EXPRESS_COMPANIES.put(6, "邮政EMS");
     }
+
+    private final MessageService messageService;
 
     @PostMapping("/create-order")
     @Operation(summary = "创建快递订单")
@@ -48,7 +53,7 @@ public class ExpressController {
             order.setUserId(userId);
             order.setType("express");
             order.setTitle("快递寄件");
-            
+
             // 将快递公司ID映射为名称
             String companyName = EXPRESS_COMPANIES.getOrDefault(expressOrderDTO.getCompanyId(), "未知快递公司");
             order.setDescription(companyName + "，重量：" + expressOrderDTO.getWeight() + "kg");
@@ -70,6 +75,11 @@ public class ExpressController {
             order.setDetails(details);
 
             orderService.createOrder(order);
+            MessageCreateDTO dto = new MessageCreateDTO();
+            dto.setTitle("快递寄件通知");
+            dto.setContent(companyName + "：您的快递已成功寄出，运单号：" + order.getOrderNo() + "，预计3天内到达。");
+            dto.setType("express");
+            messageService.createMessage(dto);
             return Result.success();
         } catch (Exception e) {
             return Result.error("创建订单失败：" + e.getMessage());

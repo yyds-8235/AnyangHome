@@ -15,6 +15,9 @@ public class OrderStatusUpdateDTO {
     @Schema(description = "订单状态 (pending: 待支付, paid: 已支付, completed: 已完成, cancelled: 已取消)")
     private String status;
 
+    @Schema(description = "订单类型 (optional)")
+    private String type;
+
     @Schema(description = "备注信息")
     private String remark;
 }

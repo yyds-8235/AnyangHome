@@ -42,12 +42,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderStatus(Long orderId, String status, String remark) {
+    public Order updateOrderStatus(Long orderId, String status, String remark) {
         Order order = orderMapper.selectById(orderId);
         if (order != null) {
             order.setStatus(status);
 
             orderMapper.updateById(order);
         }
+        return order;
     }
 }

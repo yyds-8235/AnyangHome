@@ -26,5 +26,5 @@ public interface OrderService {
     /**
      * 更新订单状态（包含业务类型和备注）
      */
-    void updateOrderStatus(Long orderId, String status, String remark);
+    Order updateOrderStatus(Long orderId, String status, String remark);
 }

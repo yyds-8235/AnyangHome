@@ -3,8 +3,10 @@ package com.example.anyanghome.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.anyanghome.common.Result;
+import com.example.anyanghome.pojo.dto.MessageCreateDTO;
 import com.example.anyanghome.pojo.entity.Order;
 import com.example.anyanghome.pojo.dto.OrderStatusUpdateDTO;
+import com.example.anyanghome.service.MessageService;
 import com.example.anyanghome.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final MessageService messageService;
 
     @GetMapping
     @Operation(summary = "获取用户订单列表")
@@ -48,12 +51,22 @@ public class OrderController {
     public Result<String> updateOrderStatus(
             @Parameter(description = "订单ID") @PathVariable Long id,
             @RequestBody OrderStatusUpdateDTO updateDTO) {
-        orderService.updateOrderStatus(id, updateDTO.getStatus(), updateDTO.getRemark());
+        Order order = orderService.updateOrderStatus(id, updateDTO.getStatus(), updateDTO.getRemark());
         if (updateDTO.getStatus().equals("paid")) {
             // 发送支付成功消息
+            MessageCreateDTO dto = new MessageCreateDTO();
+            dto.setTitle("支付成功通知");
+            dto.setContent("您的订单支付成功，金额：¥" + order.getPrice() + updateDTO.getRemark());
+            dto.setType(updateDTO.getType());
+            messageService.createMessage(dto);
             return Result.success("支付成功");
         } else if (updateDTO.getStatus().equals("cancelled")) {
             // 发送订单取消消息
+            MessageCreateDTO dto = new MessageCreateDTO();
+            dto.setTitle("取消订单成功通知");
+            dto.setContent("您的订单已成功取消，订单号为：" + order.getOrderNo() + "。取消方式：" + updateDTO.getRemark());
+            dto.setType(updateDTO.getType());
+            messageService.createMessage(dto);
             return Result.success("订单取消成功");
         }
         return Result.success("订单状态更新成功");
