@@ -12,6 +12,7 @@ import com.example.anyanghome.pojo.entity.Message;
 import com.example.anyanghome.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 消息服務實現類
@@ -23,6 +24,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Message createMessage(MessageCreateDTO dto) {
         Message message = new Message();
         message.setUserId(StpUtil.getLoginIdAsLong());
@@ -47,6 +49,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void markAsRead(Long messageId, Long userId) {
         LambdaUpdateWrapper<Message> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Message::getId, messageId)
@@ -56,6 +59,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void markAllAsRead(Long userId) {
         LambdaUpdateWrapper<Message> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Message::getUserId, userId)

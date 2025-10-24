@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Order updateOrderStatus(Long orderId, String status, String remark) {
         Order order = orderMapper.selectById(orderId);
         if (order != null) {
